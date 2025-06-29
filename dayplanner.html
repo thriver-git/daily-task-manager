@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Day Planner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    td[contenteditable] {
+      background: #fff;
+    }
+
+    .controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Day Planner</h1>
+
+  <div class="controls">
+    <button onclick="addRow()">Add Time Row</button>
+    <button onclick="deleteRow()">Delete Last Row</button>
+    <button onclick="addColumn()">Add Column</button>
+    <button onclick="deleteColumn()">Delete Last Column</button>
+  </div>
+
+  <table id="planner">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Task 1</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td contenteditable="true">09:00 - 10:00</td>
+        <td contenteditable="true"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const table = document.getElementById('planner');
+
+    function addRow() {
+      const row = table.insertRow();
+      const colCount = table.rows[0].cells.length;
+      for (let i = 0; i < colCount; i++) {
+        const cell = row.insertCell();
+        cell.contentEditable = "true";
+        if (i === 0) cell.textContent = "New Time";
+      }
+    }
+
+    function deleteRow() {
+      if (table.rows.length > 2) {
+        table.deleteRow(table.rows.length - 1);
+      } else {
+        alert("At least one row must remain.");
+      }
+    }
+
+    function addColumn() {
+      const headerRow = table.rows[0];
+      const newHeader = document.createElement("th");
+      newHeader.textContent = "Task " + headerRow.cells.length;
+      headerRow.appendChild(newHeader);
+
+      for (let i = 1; i < table.rows.length; i++) {
+        const cell = table.rows[i].insertCell();
+        cell.contentEditable = "true";
+      }
+    }
+
+    function deleteColumn() {
+      const colCount = table.rows[0].cells.length;
+      if (colCount > 2) {
+        for (let row of table.rows) {
+          row.deleteCell(colCount - 1);
+        }
+      } else {
+        alert("At least one task column must remain.");
+      }
+    }
+  </script>
+
+</body>
+</html>
